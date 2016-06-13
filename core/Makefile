@@ -1063,6 +1063,17 @@ else
         build/target/product/security/hexagon-devkey
 endif
 
+ifneq ($(OTA_PACKAGE_SIGNING_KEY),)
+    OTA_PUBLIC_KEYS := $(OTA_PACKAGE_SIGNING_KEY).x509.pem
+    PRODUCT_EXTRA_RECOVERY_KEYS := $(DEFAULT_SYSTEM_DEV_CERTIFICATE)
+else
+    PRODUCT_EXTRA_RECOVERY_KEYS += \
+        build/target/product/security/platform
+endif
+
+# ArchiDroid
+include $(BUILD_SYSTEM)/archidroid.mk
+
 # Generate a file containing the keys that will be read by the
 # recovery binary.
 RECOVERY_INSTALL_OTA_KEYS := \
@@ -1171,6 +1182,19 @@ $(recovery_ramdisk): $(MINIGZIP) \
 		$(recovery_uncompressed_ramdisk)
 	@echo "----- Making compressed recovery ramdisk ------"
 	$(hide) $(RECOVERY_RAMDISK_COMPRESSOR) < $(recovery_uncompressed_ramdisk) > $@
+
+ifndef BOARD_CUSTOM_BOOTIMG_MK
+$(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(recovery_ramdisk) \
+		$(recovery_kernel)
+	$(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $@
+endif
+ifeq (true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VERITY))
+	$(BOOT_SIGNER) /recovery $@ $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $@
+endif
+ifneq ($(ARCHIDROID_IGNORE_RECOVERY_SIZE),true)
+	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE))
+endif
+	@echo -e ${CL_CYN}"Made recovery image: $@"${CL_RST}
 
 ifndef BOARD_CUSTOM_BOOTIMG_MK
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(recovery_ramdisk) $(recovery_kernel) \
