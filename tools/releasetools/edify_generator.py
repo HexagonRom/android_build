@@ -165,11 +165,6 @@ class EdifyGenerator(object):
     self.script.append('run_program("/sbin/busybox", "unzip", "/tmp/dolby/dolby.zip", "META-INF/com/google/android/*", "-d", "/tmp/dolby");')
     self.script.append('run_program("/sbin/busybox", "sh", "/tmp/dolby/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/dolby/dolby.zip");')
 
-  def GappsScript(self):
-    self.script.append('package_extract_dir("Gapps", "/tmp/Gapps");')
-    self.script.append('run_program("/sbin/busybox", "unzip", "/tmp/Gapps/Gapps.zip", "META-INF/com/google/android/*", "-d", "/tmp/Gapps");')
-    self.script.append('run_program("/sbin/busybox", "sh", "/tmp/Gapps/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/Gapps/Gapps.zip");')
-
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
     'dur' seconds.  'dur' may be zero to advance it via SetProgress

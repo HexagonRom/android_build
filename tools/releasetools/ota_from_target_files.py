@@ -775,13 +775,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     script.DolbyScript()
 
   if block_based:
-    script.Print("Flashing Gapps...")
-    common.ZipWriteStr(output_zip, "Gapps/Gapps.zip",
-                   ""+input_zip.read("SYSTEM/addon.d/Gapps.zip"))
-    script.Mount("/system")
-    script.GappsScript()
-
-  if block_based:
     script.Unmount("/system")
   script.ShowProgress(0.05, 5)
   script.WriteRawImage("/boot", "boot.img")
