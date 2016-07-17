@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Copyright (C) 2012 The CyanogenMod Project
-# Copyright (C) 2012-2014 HEXAGON Project
+# Copyright (C) 2012-2014 HexagonRom Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -52,13 +52,13 @@ except:
     device = product
 
 if not depsonly:
-    print("Device %s not found. Attempting to retrieve device repository from HEXAGON Github (http://github.com/HexagomRom)." % device)
+    print("Device %s not found. Attempting to retrieve device repository from HexagonRom Github (http://github.com/HexagonRom)." % device)
 
 repositories = []
 
 page = 1
 while not depsonly:
-    result = json.loads(urllib.request.urlopen("https://api.github.com/users/HEXAGON/repos?page=%d" % page).read().decode())
+    result = json.loads(urllib.request.urlopen("https://api.github.com/users/HexagonRom/repos?page=%d" % page).read().decode())
     if len(result) == 0:
         break
     for res in result:
@@ -98,7 +98,7 @@ def indent(elem, level=0):
 
 def get_from_manifest(devicename):
     try:
-        lm = ElementTree.parse(".repo/local_manifests/hexagon_manifest.xml")
+        lm = ElementTree.parse(".repo/local_manifests/Hexagon_manifest.xml")
         lm = lm.getroot()
     except:
         lm = ElementTree.Element("manifest")
@@ -122,7 +122,7 @@ def get_from_manifest(devicename):
 
 def is_in_manifest(projectname, branch):
     try:
-        lm = ElementTree.parse(".repo/local_manifests/hexagon_manifest.xml")
+        lm = ElementTree.parse(".repo/local_manifests/Hexagon_manifest.xml")
         lm = lm.getroot()
     except:
         lm = ElementTree.Element("manifest")
@@ -135,7 +135,7 @@ def is_in_manifest(projectname, branch):
 
 def add_to_manifest_dependencies(repositories):
     try:
-        lm = ElementTree.parse(".repo/local_manifests/hexagon_manifest.xml")
+        lm = ElementTree.parse(".repo/local_manifests/Hexagon_manifest.xml")
         lm = lm.getroot()
     except:
         lm = ElementTree.Element("manifest")
@@ -149,7 +149,7 @@ def add_to_manifest_dependencies(repositories):
                 print ('Updating dependency %s' % (repo_name))
                 existing_project.set('name', repository['repository'])
             if existing_project.attrib['revision'] == repository['branch']:
-                print ('HEXAGON/%s already exists' % (repo_name))
+                print ('HexagonRom/%s already exists' % (repo_name))
             else:
                 print ('updating branch for %s to %s' % (repo_name, repository['branch']))
                 existing_project.set('revision', repository['branch'])
@@ -157,7 +157,7 @@ def add_to_manifest_dependencies(repositories):
 
         print ('Adding dependency: %s -> %s' % (repo_name, repo_target))
         project = ElementTree.Element("project", attrib = { "path": repo_target,
-            "remote": "hexagon", "name": repo_name, "revision": "mm" })
+            "remote": "hexagon", "name": repo_name, "revision": "cm-13.0" })
 
         if 'branch' in repository:
             project.set('revision',repository['branch'])
@@ -174,7 +174,7 @@ def add_to_manifest_dependencies(repositories):
 
 def add_to_manifest(repositories):
     try:
-        lm = ElementTree.parse(".repo/local_manifests/hexagon_manifest.xml")
+        lm = ElementTree.parse(".repo/local_manifests/Hexagon_manifest.xml")
         lm = lm.getroot()
     except:
         lm = ElementTree.Element("manifest")
@@ -183,12 +183,12 @@ def add_to_manifest(repositories):
         repo_name = repository['repository']
         repo_target = repository['target_path']
         if exists_in_tree(lm, repo_name):
-            print('HEXAGON/%s already exists' % (repo_name))
+            print('HexagonRom/%s already exists' % (repo_name))
             continue
 
-        print('Adding dependency: HEXAGON/%s -> %s' % (repo_name, repo_target))
+        print('Adding dependency: HexagonRom/%s -> %s' % (repo_name, repo_target))
         project = ElementTree.Element("project", attrib = { "path": repo_target,
-            "remote": "hexagon", "name": "HEXAGON/%s" % repo_name, "revision": "mm" })
+            "remote": "hexagon", "name": "HexagonRom/%s" % repo_name, "revision": "cm-13.0" })
 
         if 'branch' in repository:
             project.set('revision',repository['branch'])
@@ -204,7 +204,7 @@ def add_to_manifest(repositories):
     raw_xml = ElementTree.tostring(lm).decode()
     raw_xml = '<?xml version="1.0" encoding="UTF-8"?>\n' + raw_xml
 
-    f = open('.repo/local_manifests/hexagon_manifest.xml', 'w')
+    f = open('.repo/local_manifests/Hexagon_manifest.xml', 'w')
     f.write(raw_xml)
     f.close()
 
@@ -261,7 +261,7 @@ else:
 
             repo_path = "device/%s/%s" % (manufacturer, device)
 
-            add_to_manifest([{'repository':repo_name,'target_path':repo_path,'branch':'mm'}])
+            add_to_manifest([{'repository':repo_name,'target_path':repo_path,'branch':'cm-13.0'}])
 
             print("Syncing repository to retrieve project.")
             os.system('repo sync --force-sync %s' % repo_path)
@@ -271,4 +271,5 @@ else:
             print("Done")
             sys.exit()
 
-print("Repository for %s not found in the HEXAGON Github repository list. If this is in error, you may need to manually add it to your local_manifests/hexagon_manifest.xml." % device)
+print("Repository for %s not found in the HexagonRom Github repository list. If this is in error, you may need to manually add it to your local_manifests/Hexagon_manifest.xml." % device)
+
