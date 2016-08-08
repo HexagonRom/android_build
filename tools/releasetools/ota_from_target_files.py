@@ -628,7 +628,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   if OPTIONS.backuptool:
     script.Mount("/system")
     script.RunBackup("backup")
-    script.RunPersist("save")
     script.Unmount("/system")
 
   system_progress = 0.75
@@ -748,7 +747,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     if block_based:
       script.Mount("/system")
     script.RunBackup("restore")
-    script.RunPersist("restore")
     if block_based:
       script.Unmount("/system")
 
