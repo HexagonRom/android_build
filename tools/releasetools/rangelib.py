@@ -24,12 +24,13 @@ class RangeSet(object):
   lots of runs."""
 
   def __init__(self, data=None):
-    # TODO(tbao): monotonic is broken when passing in a tuple.
     self.monotonic = False
     if isinstance(data, str):
       self._parse_internal(data)
     elif data:
+      assert len(data) % 2 == 0
       self.data = tuple(self._remove_pairs(data))
+      self.monotonic = all(x < y for x, y in zip(self.data, self.data[1:]))
     else:
       self.data = ()
 
@@ -39,8 +40,10 @@ class RangeSet(object):
 
   def __eq__(self, other):
     return self.data == other.data
+
   def __ne__(self, other):
     return self.data != other.data
+
   def __nonzero__(self):
     return bool(self.data)
   def __bool__(self):
@@ -76,9 +79,9 @@ class RangeSet(object):
     monotonic = True
     for p in text.split():
       if "-" in p:
-        s, e = p.split("-")
-        data.append(int(s))
-        data.append(int(e)+1)
+        s, e = (int(x) for x in p.split("-"))
+        data.append(s)
+        data.append(e+1)
         if last <= s <= e:
           last = e
         else:
@@ -90,13 +93,16 @@ class RangeSet(object):
         if last <= s:
           last = s+1
         else:
-          monotonic = True
+          monotonic = False
     data.sort()
     self.data = tuple(self._remove_pairs(data))
     self.monotonic = monotonic
 
   @staticmethod
   def _remove_pairs(source):
+    """Remove consecutive duplicate items to simplify the result.
+
+    [1, 2, 2, 5, 5, 10] will become [1, 10]."""
     last = None
     for i in source:
       if i == last:
@@ -119,6 +125,7 @@ class RangeSet(object):
     return " ".join(out)
 
   def to_string_raw(self):
+    assert self.data
     return str(len(self.data)) + "," + ",".join(str(i) for i in self.data)
 
   def union(self, other):

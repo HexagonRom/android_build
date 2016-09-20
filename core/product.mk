@@ -23,13 +23,21 @@
 # and the .mk suffix) of the product makefile, "<product_name>:" can be
 # omitted.
 
+# Search for AndroidProducts.mks in the given dir.
+# $(1): the path to the dir
+define _search-android-products-files-in-dir
+$(sort $(shell test -d $(1) && find -L $(1) \
+  -maxdepth 6 \
+  -name .git -prune \
+  -o -name AndroidProducts.mk -print))
+endef
+
 #
 # Returns the list of all AndroidProducts.mk files.
 # $(call ) isn't necessary.
 #
 define _find-android-products-files
-$(shell test -d device && find device -maxdepth 6 -name AndroidProducts.mk) \
-  $(shell test -d vendor && find vendor -maxdepth 6 -name AndroidProducts.mk) \
+$(foreach d, device vendor product,$(call _search-android-products-files-in-dir,$(d))) \
   $(SRC_TARGET_DIR)/product/AndroidProducts.mk
 endef
 
@@ -103,6 +111,7 @@ _product_var_list := \
     PRODUCT_SUPPORTS_BOOT_SIGNER \
     PRODUCT_SUPPORTS_VBOOT \
     PRODUCT_SUPPORTS_VERITY \
+    PRODUCT_SUPPORTS_VERITY_FEC \
     PRODUCT_OEM_PROPERTIES \
     PRODUCT_SYSTEM_PROPERTY_BLACKLIST \
     PRODUCT_SYSTEM_SERVER_JARS \
@@ -114,6 +123,10 @@ _product_var_list := \
     PRODUCT_DEX_PREOPT_MODULE_CONFIGS \
     PRODUCT_DEX_PREOPT_DEFAULT_FLAGS \
     PRODUCT_DEX_PREOPT_BOOT_FLAGS \
+    PRODUCT_SYSTEM_BASE_FS_PATH \
+    PRODUCT_VENDOR_BASE_FS_PATH \
+    PRODUCT_SHIPPING_API_LEVEL \
+
 
 
 define dump-product
@@ -134,7 +147,10 @@ endef
 # $(2): Value to append
 #
 define inherit-product_append-var
-  $(eval $(1) := $($(1)) $(INHERIT_TAG)$(strip $(2)))
+  $(if $(findstring ../,$(2)),\
+    $(eval np := $(call normalize-paths,$(2))),\
+    $(eval np := $(strip $(2))))\
+  $(eval $(1) := $($(1)) $(INHERIT_TAG)$(np))
 endef
 
 #
@@ -153,9 +169,12 @@ endef
 # $(1): Product being inherited
 #
 define inherit-product_track-node
+  $(if $(findstring ../,$(1)),\
+    $(eval np := $(call normalize-paths,$(1))),\
+    $(eval np := $(strip $(1))))\
   $(eval inherit_var := \
       PRODUCTS.$(strip $(word 1,$(_include_stack))).INHERITS_FROM) \
-  $(eval $(inherit_var) := $(sort $($(inherit_var)) $(strip $(1)))) \
+  $(eval $(inherit_var) := $(sort $($(inherit_var)) $(np))) \
   $(eval inherit_var:=) \
   $(eval ALL_PRODUCTS := $(sort $(ALL_PRODUCTS) $(word 1,$(_include_stack))))
 endef
@@ -168,6 +187,7 @@ endef
 #  2. Records the inheritance in the .INHERITS_FROM variable
 #  3. Records that we've visited this node, in ALL_PRODUCTS
 #
+
 define inherit-product
   $(foreach v,$(_product_var_list), \
       $(call inherit-product_append-var,$(v),$(1))) \
@@ -290,7 +310,6 @@ _product_stash_var_list := $(_product_var_list) \
 	TARGET_NO_RECOVERY \
 	TARGET_NO_RADIOIMAGE \
 	TARGET_HARDWARE_3D \
-	TARGET_PROVIDES_INIT_RC \
 	TARGET_CPU_ABI \
 	TARGET_CPU_ABI2 \
 
@@ -326,6 +345,7 @@ _product_stash_var_list += \
 _product_stash_var_list += \
 	GLOBAL_CFLAGS_NO_OVERRIDE \
 	GLOBAL_CPPFLAGS_NO_OVERRIDE \
+	GLOBAL_CLANG_CFLAGS_NO_OVERRIDE \
 
 _product_stash_var_list += \
 	TARGET_SKIP_DEFAULT_LOCALE \

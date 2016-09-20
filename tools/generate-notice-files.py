@@ -102,7 +102,7 @@ def combine_notice_files_html(file_hash, input_dir, output_filename):
     # most browsers, but href's to table row ids do)
     id_table = {}
     id_count = 0
-    for value in file_hash.values():
+    for value in file_hash:
         for filename in value:
              id_table[filename] = id_count
         id_count += 1
@@ -119,7 +119,7 @@ def combine_notice_files_html(file_hash, input_dir, output_filename):
     print("<ul>", file=output_file)
 
     # Flatten the list of lists into a single list of filenames
-    sorted_filenames = sorted(itertools.chain.from_iterable(file_hash.values()))
+    sorted_filenames = sorted(itertools.chain.from_iterable(file_hash))
 
     # Print out a nice table of contents
     for filename in sorted_filenames:
@@ -130,11 +130,11 @@ def combine_notice_files_html(file_hash, input_dir, output_filename):
     print("</div><!-- table of contents -->", file=output_file)
     # Output the individual notice file lists
     print('<table cellpadding="0" cellspacing="0" border="0">', file=output_file)
-    for value in file_hash.values():
+    for value in file_hash:
         print('<tr id="id%d"><td class="same-license">' % id_table.get(value[0]), file=output_file)
         print('<div class="label">Notices for file(s):</div>', file=output_file)
         print('<div class="file-list">', file=output_file)
-        for filename in sorted(value):
+        for filename in value:
             print("%s <br/>" % (SRC_DIR_STRIP_RE.sub(r"\1", filename)), file=output_file)
         print("</div><!-- file-list -->", file=output_file)
         print(file=output_file)
@@ -157,10 +157,10 @@ def combine_notice_files_text(file_hash, input_dir, output_filename, file_title)
     SRC_DIR_STRIP_RE = re.compile(input_dir + "(/.*).txt")
     output_file = open(output_filename, "wb")
     print(file_title, file=output_file)
-    for value in file_hash.values():
+    for value in file_hash:
       print("============================================================", file=output_file)
       print("Notices for file(s):", file=output_file)
-      for filename in sorted(value):
+      for filename in value:
         print(SRC_DIR_STRIP_RE.sub(r"\1", filename), file=output_file)
       print("------------------------------------------------------------", file=output_file)
       print(open(value[0]).read(), file=output_file)
@@ -181,11 +181,12 @@ def main(args):
                 file_md5sum = md5sum(filename)
                 files_with_same_hash[file_md5sum].append(filename)
 
+    filesets = [sorted(files_with_same_hash[md5]) for md5 in sorted(files_with_same_hash.keys())]
 
     print("Combining NOTICE files into HTML")
-    combine_notice_files_html(files_with_same_hash, input_dir, html_output_file)
+    combine_notice_files_html(filesets, input_dir, html_output_file)
     print("Combining NOTICE files into text")
-    combine_notice_files_text(files_with_same_hash, input_dir, txt_output_file, file_title)
+    combine_notice_files_text(filesets, input_dir, txt_output_file, file_title)
 
 if __name__ == "__main__":
     main(args)

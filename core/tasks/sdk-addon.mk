@@ -105,19 +105,19 @@ $(full_target): PRIVATE_DOCS_DIRS := $(addprefix $(OUT_DOCS)/, $(doc_modules))
 $(full_target): PRIVATE_STAGING_DIR := $(call append-path,$(staging),$(addon_dir_leaf))
 
 $(full_target): $(sdk_addon_deps) | $(ACP)
-	@echo -e ${CL_GRN}"Packaging SDK Addon:"${CL_RST}" $@"
+	@echo "Packaging SDK Addon:"" $@"
 	$(hide) mkdir -p $(PRIVATE_STAGING_DIR)/docs
 	$(hide) for d in $(PRIVATE_DOCS_DIRS); do \
 	    $(ACP) -r $$d $(PRIVATE_STAGING_DIR)/docs ;\
 	  done
 	$(hide) mkdir -p $(dir $@)
-	$(hide) ( F=$$(pwd)/$@ ; cd $(PRIVATE_STAGING_DIR)/.. && zip -rq $$F $(notdir $(PRIVATE_STAGING_DIR)) )
+	$(hide) ( F=$$(pwd)/$@ ; cd $(PRIVATE_STAGING_DIR)/.. && zip -rqX $$F $(notdir $(PRIVATE_STAGING_DIR)) )
 
 $(full_target_img): PRIVATE_STAGING_DIR := $(call append-path,$(staging),$(addon_dir_img))/images/$(TARGET_CPU_ABI)
 $(full_target_img): $(full_target) $(addon_img_source_prop)
 	@echo Packaging SDK Addon System-Image: $@
 	$(hide) mkdir -p $(dir $@)
-	$(hide) ( F=$$(pwd)/$@ ; cd $(PRIVATE_STAGING_DIR)/.. && zip -rq $$F $(notdir $(PRIVATE_STAGING_DIR)) )
+	$(hide) ( F=$$(pwd)/$@ ; cd $(PRIVATE_STAGING_DIR)/.. && zip -rqX $$F $(notdir $(PRIVATE_STAGING_DIR)) )
 
 
 .PHONY: sdk_addon
