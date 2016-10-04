@@ -125,7 +125,7 @@ $(shell mkdir -p $(OUT_DIR) && \
 BUILD_NUMBER_FROM_FILE := $(shell cat $(OUT_DIR)/build_number.txt)
 BUILD_DATETIME_FROM_FILE := $(shell cat $(OUT_DIR)/build_date.txt)
 ifeq ($(HOST_OS),darwin)
-DATE_FROM_FILE := date -d $(BUILD_DATETIME_FROM_FILE)
+DATE_FROM_FILE := date -r $(BUILD_DATETIME_FROM_FILE)
 else
 DATE_FROM_FILE := date -d @$(BUILD_DATETIME_FROM_FILE)
 endif
@@ -145,10 +145,10 @@ endif
 include $(BUILD_SYSTEM)/cleanbuild.mk
 
 # Bring in Qualcomm helper macros
-include $(BUILD_SYSTEM)/qcom_utils.mk
+include vendor/hexagon/build/core/qcom_utils.mk
 
 # Bring in Mediatek helper macros too
-include $(BUILD_SYSTEM)/mtk_utils.mk
+include vendor/hexagon/build/core/mtk_utils.mk
 
 # Include the google-specific config
 -include vendor/google/build/config.mk
