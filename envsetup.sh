@@ -1717,4 +1717,4 @@ check_bash_version && {
 
 export ANDROID_BUILD_TOP=$(gettop)
 
-. vendor/cm/build/envsetup.sh
+. vendor/hexagon/build/envsetup.sh
