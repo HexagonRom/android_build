@@ -340,7 +340,6 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
   Returns:
     True iff the image is built successfully.
   """
-  print("BuildImage: in_dir = %s, out_file = %s" % (in_dir, out_file))
   # system_root_image=true: build a system.img that combines the contents of
   # /system and the ramdisk, and can be mounted at the root of the file system.
   origin_in = in_dir
@@ -472,7 +471,6 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
     else:
       print("fs type is not ext4")
       (_, exit_code) = RunCommand(build_command)
-    print("Running %s command, exit code = %d" % (build_command, exit_code))
   finally:
     if in_dir != origin_in:
       # Clean up temporary directories and files.
@@ -535,7 +533,7 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
     # Run e2fsck on the inflated image file
     e2fsck_command = ["e2fsck", "-f", "-n", unsparse_image]
     (_, exit_code) = RunCommand(e2fsck_command)
-    print("Running %s command, exit code = %d" % (e2fsck_command, exit_code))
+
     os.remove(unsparse_image)
 
   return exit_code == 0

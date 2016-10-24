@@ -4,12 +4,18 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - lunch:     lunch <product_name>-<build_variant>
 - tapas:     tapas [<App1> <App2> ...] [arm|x86|mips|armv5|arm64|x86_64|mips64] [eng|userdebug|user]
 - croot:     Changes directory to the top of the tree.
+- cout:      Changes directory to out.
 - m:         Makes from the top of the tree.
 - mm:        Builds all of the modules in the current directory, but not their dependencies.
 - mmm:       Builds all of the modules in the supplied directories, but not their dependencies.
              To limit the modules being built use the syntax: mmm dir/:target1,target2.
 - mma:       Builds all of the modules in the current directory, and their dependencies.
 - mmma:      Builds all of the modules in the supplied directories, and their dependencies.
+- mmap:      Builds all of the modules in the current directory, and its dependencies, then pushes the package to the device.
+- mmp:       Builds all of the modules in the current directory and pushes them to the device.
+- mmmp:      Builds all of the modules in the supplied directories and pushes them to the device.
+- mms:       Short circuit builder. Quickly re-build the kernel, rootfs, boot and system images
+             without deep dependencies. Requires the full build to have run before.
 - provision: Flash device with all required partitions. Options will be passed on to fastboot.
 - cgrep:     Greps on all local C/C++ files.
 - ggrep:     Greps on all local Gradle files.
@@ -20,12 +26,20 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - sepgrep:   Greps on all local sepolicy files.
 - sgrep:     Greps on all local source files.
 - godir:     Go to the directory containing a file.
-
-EOF
-
-    __print_cm_functions_help
-
-cat <<EOF
+- cmremote:  Add git remote for CM Gerrit Review
+- cmgerrit:  A Git wrapper that fetches/pushes patch from/to CM Gerrit Review
+- aospremote: Add git remote for matching AOSP repository
+- cafremote: Add git remote for matching CodeAurora repository.
+- cmrebase:  Rebase a Gerrit change and push it again
+- mka:       Builds using SCHED_BATCH on all processors
+- mkap:      Builds the module(s) using mka and pushes them to the device.
+- cmka:      Cleans and builds using mka.
+- repolastsync: Prints date and time of last repo sync.
+- reposync:  Parallel repo sync using ionice and SCHED_BATCH
+- repopick:  Utility to fetch changes from Gerrit.
+- installboot: Installs a boot.img to the connected device.
+- installrecovery: Installs a recovery.img to the connected device.
+- repodiff:  Diff 2 different branches or tags within the same repo
 
 Environment options:
 - SANITIZE_HOST: Set to 'true' to use ASAN for all host modules. Note that
