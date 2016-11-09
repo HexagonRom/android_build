@@ -106,6 +106,7 @@ LOCAL_RES_LIBRARIES:=
 LOCAL_MANIFEST_INSTRUMENTATION_FOR:=
 LOCAL_AIDL_INCLUDES:=
 LOCAL_VTS_INCLUDES:=
+LOCAL_AIDL_FLAGS:=
 LOCAL_JARJAR_RULES:=
 LOCAL_ADDITIONAL_JAVA_DIR:=
 LOCAL_ALLOW_UNDEFINED_SYMBOLS:=
@@ -204,6 +205,8 @@ LOCAL_SHARED_ANDROID_LIBRARIES:=
 # Used to replace the installed file of a presigned prebuilt apk in PDK fusion build,
 # to avoid installing the presigned apks with classes.dex unstripped.
 LOCAL_REPLACE_PREBUILT_APK_INSTALLED:=
+LOCAL_EXTRACT_APK:=
+LOCAL_EXTRACT_DPI_APK:=
 
 # arch specific variables
 LOCAL_SRC_FILES_$(TARGET_ARCH):=

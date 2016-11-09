@@ -24,7 +24,7 @@ PRODUCT_PACKAGES += \
     BasicDreams \
     BlockedNumberProvider \
     BookmarkProvider \
-    Browser2 \
+    Browser \
     Calendar \
     CalendarProvider \
     CaptivePortalLogin \
@@ -52,6 +52,7 @@ PRODUCT_PACKAGES += \
     QuickSearchBox \
     Settings \
     SharedStorageBackup \
+    StorageManager \
     Telecom \
     TeleService \
     VpnDialogs \
