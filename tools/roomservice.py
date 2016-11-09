@@ -157,7 +157,7 @@ def add_to_manifest_dependencies(repositories):
 
         print ('Adding dependency: %s -> %s' % (repo_name, repo_target))
         project = ElementTree.Element("project", attrib = { "path": repo_target,
-            "remote": "hexagon", "name": repo_name, "revision": "cm-14.0" })
+            "remote": "hexagon", "name": repo_name, "revision": "cm-14.1" })
 
         if 'branch' in repository:
             project.set('revision',repository['branch'])
@@ -188,7 +188,7 @@ def add_to_manifest(repositories):
 
         print('Adding dependency: HexagonRom/%s -> %s' % (repo_name, repo_target))
         project = ElementTree.Element("project", attrib = { "path": repo_target,
-            "remote": "hexagon", "name": "HexagonRom/%s" % repo_name, "revision": "cm-14.0" })
+            "remote": "hexagon", "name": "HexagonRom/%s" % repo_name, "revision": "cm-14.1" })
 
         if 'branch' in repository:
             project.set('revision',repository['branch'])
@@ -261,7 +261,7 @@ else:
 
             repo_path = "device/%s/%s" % (manufacturer, device)
 
-            add_to_manifest([{'repository':repo_name,'target_path':repo_path,'branch':'cm-14.0'}])
+            add_to_manifest([{'repository':repo_name,'target_path':repo_path,'branch':'cm-14.1'}])
 
             print("Syncing repository to retrieve project.")
             os.system('repo sync --force-sync %s' % repo_path)
