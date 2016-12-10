@@ -146,7 +146,7 @@ function check_product()
         return
     fi
 
-    if (echo -n $1 | grep -q -e "^") ; then
+    if (echo -n $1 | grep -q -e "^hexagon_") ; then
        HEXAGON_BUILD=$(echo -n $1 | sed -e 's/^hexagon_//g')
        export BUILD_NUMBER=$((date +%s%N ; echo $HEXAGON_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
     else
