@@ -47,12 +47,21 @@ Environment options:
                  build is leak-check clean.
 
 Look at the source to view more functions. The complete list is:
+
+
+
 EOF
     T=$(gettop)
     for i in `cat $T/build/envsetup.sh | sed -n "/^[[:blank:]]*function /s/function \([a-z_]*\).*/\1/p" | sort | uniq`; do
       echo "$i"
     done | column
 }
+
+chmod 777 vendor/hexagon/tools/hexagon.sh
+
+chmod 777 build/tools/roomservice.py
+
+chmod 777 vendor/hexagon/tools/colors
 
 # Get all the build variables needed by this script in a single call to the build system.
 function build_build_var_cache()
@@ -91,11 +100,11 @@ function build_build_var_cache()
 function destroy_build_var_cache()
 {
     unset BUILD_VAR_CACHE_READY
-    for v in $cached_vars; do
+    for v in $(echo $cached_vars | tr " " "\n"); do
       unset var_cache_$v
     done
     unset cached_vars
-    for v in $cached_abs_vars; do
+    for v in $(echo $cached_abs_vars | tr " " "\n"); do
       unset abs_var_cache_$v
     done
     unset cached_abs_vars
@@ -285,10 +294,6 @@ function setpaths()
 
     unset ANDROID_HOST_OUT
     export ANDROID_HOST_OUT=$(get_abs_build_var HOST_OUT)
-
-    if [ -n "$ANDROID_CCACHE_DIR" ]; then
-        export CCACHE_DIR=$ANDROID_CCACHE_DIR
-    fi
 
     # needed for building linux on MacOS
     # TODO: fix the path
@@ -702,10 +707,13 @@ function lunch()
         T=$(gettop)
         pushd $T > /dev/null
         build/tools/roomservice.py $product
-        popd > /dev/null
+        cd - > /dev/null
         check_product $product
     else
+        T=$(gettop)
+        pushd $T > /dev/null
         build/tools/roomservice.py $product true
+        cd - > /dev/null
     fi
     TARGET_PRODUCT=$product \
     TARGET_BUILD_VARIANT=$variant \
@@ -1826,7 +1834,7 @@ function cafremote()
     then
         PFX="platform/"
     fi
-    git remote add caf git://codeaurora.org/$PFX$PROJECT
+    git remote add caf https://source.codeaurora.org/quic/la/$PFX$PROJECT
     echo "Remote 'caf' created"
 }
 
@@ -2457,6 +2465,7 @@ EOF
 alias mmp='dopush mm'
 alias mmmp='dopush mmm'
 alias mmap='dopush mma'
+alias mmmap='dopush mmma'
 alias mkap='dopush mka'
 alias cmkap='dopush cmka'
 
