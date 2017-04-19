@@ -625,7 +625,9 @@ function breakfast()
     add_lunch_combo full-eng
     for f in `/bin/ls vendor/hexagon/vendorsetup.sh 2> /dev/null`
         do
-            echo "including $f"
+            if [[ ${ENVSETUP_DEBUG} != false ]]; then
+                echo "including $f"
+            fi
             . $f
         done
     unset f
@@ -2667,7 +2669,9 @@ for f in `test -d device && find -L device -maxdepth 4 -name 'vendorsetup.sh' 2>
          `test -d vendor && find -L vendor -maxdepth 4 -name 'vendorsetup.sh' 2> /dev/null | sort` \
          `test -d product && find -L product -maxdepth 4 -name 'vendorsetup.sh' 2> /dev/null | sort`
 do
-    echo "including $f"
+    if [[ ${ENVSETUP_DEBUG} != false ]]; then
+        echo "including $f"
+    fi
     . $f
 done
 unset f
@@ -2678,7 +2682,10 @@ check_bash_version && {
     for dir in $dirs; do
     if [ -d ${dir} ]; then
         for f in `/bin/ls ${dir}/[a-z]*.bash 2> /dev/null`; do
-            echo "including $f"
+            if [[ ${ENVSETUP_DEBUG} != false ]]; then
+                echo "including $f"
+            fi
+
             . $f
         done
     fi
