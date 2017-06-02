@@ -832,8 +832,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   if block_based:
     script.Print("Flashing SuperSU...")
     common.ZipWriteStr(output_zip, "supersu/supersu.zip",
-                   ""+input_zip.read("SYSTEM/addon.d/UPDATE-SuperSU.zip"))
-        script.FlashSuperSU()
+""+input_zip.read("SYSTEM/addon.d/UPDATE-SuperSU.zip"))
+    script.FlashSuperSU()
 
   script.ShowProgress(0.2, 10)
   device_specific.FullOTA_InstallEnd()
