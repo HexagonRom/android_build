@@ -1506,8 +1506,10 @@ endef
 $(BUILT_SYSTEMIMAGE): $(FULL_SYSTEMIMAGE_DEPS) $(INSTALLED_FILES_FILE) $(BUILD_IMAGE_SRCS)
 	$(call build-systemimage-target,$@)
 
-ifneq ($(TARGET_DISABLE_LINEAGE_SDK), true)
+ifndef I_WANT_A_QUAIL_STAR
+ifneq ($(WITHOUT_CHECK_API),true)
 $(BUILT_SYSTEMIMAGE): checkapi
+endif
 endif
 
 INSTALLED_SYSTEMIMAGE := $(PRODUCT_OUT)/system.img
