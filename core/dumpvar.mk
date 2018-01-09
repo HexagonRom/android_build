@@ -97,9 +97,19 @@ endif
 
 ifneq ($(filter report_config,$(DUMP_MANY_VARS)),)
 # Construct the shell commands that print the config banner.
-report_config_sh := echo '============================================';
+report_config_sh += echo '==========================================================';
+report_config_sh += echo '            \ \                                           ';
+report_config_sh += echo '             \ \        H.E.X.A.G.O.N          .d8888b.   ';
+report_config_sh += echo '             / /            R.O.M             Y88b  d88P  ';
+report_config_sh += echo '            / /  _     _    _______ _    _    Y88b  d88P  ';
+report_config_sh += echo '           / /  | |   | |  (_______) \  / /    *88888*    ';
+report_config_sh += echo '          / /   | |__ | |   _____   \ \/ /    .d8P88Y8b.  ';
+report_config_sh += echo '         / /    |  __|| |  |  ___|   \  /     888    888  ';
+report_config_sh += echo '________/ /     | |   | |  | |_____ / /\ \    Y88b  d88P  ';
+report_config_sh += echo '_________/      |_|   |_|  |_______/_/  \_\     Y8888P    ';
+report_config_sh += echo '==========================================================';
 report_config_sh += $(foreach v,$(print_build_config_vars),echo '$v=$($(v))';)
-report_config_sh += echo '============================================';
+report_config_sh += echo '==========================================================';
 endif
 
 # Dump mulitple variables to "<var>=<value>" pairs, one per line.
