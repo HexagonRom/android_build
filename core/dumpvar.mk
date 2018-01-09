@@ -3,7 +3,7 @@
 print_build_config_vars := \
   PLATFORM_VERSION_CODENAME \
   PLATFORM_VERSION \
-  LINEAGE_VERSION \
+  HEXAGON_VERSION \
   TARGET_PRODUCT \
   TARGET_BUILD_VARIANT \
   TARGET_BUILD_TYPE \
@@ -123,9 +123,22 @@ endif
 
 endif # CALLED_FROM_SETUP
 
+
+
 ifneq ($(PRINT_BUILD_CONFIG),)
-$(info ============================================)
+$(info +==========================================================+)
+$(info +            \ \                                           +)
+$(info +             \ \        H.E.X.A.G.O.N         77777777777 +)
+$(info +             / /            R.O.M             7777777777  +)
+$(info +            / /  _     _    _______ _    _        7777    +)
+$(info +           / /  | |   | |  (_______) \  / /      7777     +)
+$(info +          / /   | |__ | |   _____   \ \/ /      7777      +)
+$(info +         / /    |  __|| |  |  ___|   \  /      7777       +)
+$(info +________/ /     | |   | |  | |_____ / /\ \    7777        +)
+$(info +_________/      |_|   |_|  |_______/_/  \_\  7777         +)
+$(info +==========================================================+)
+
 $(foreach v, $(print_build_config_vars),\
   $(info $v=$($(v))))
-$(info ============================================)
+$(info +==========================================================+)
 endif

@@ -168,9 +168,9 @@ include $(BUILD_SYSTEM)/node_fns.mk
 include $(BUILD_SYSTEM)/product.mk
 include $(BUILD_SYSTEM)/device.mk
 
-# A Lineage build needs only the Lineage product makefiles.
-ifneq ($(LINEAGE_BUILD),)
-  all_product_configs := $(shell find device -path "*/$(LINEAGE_BUILD)/lineage.mk")
+# A HEXAGON build needs only the HEXAGON product makefiles.
+ifneq ($(HEXAGON_BUILD),)
+  all_product_configs := $(shell find device -path "*/$(HEXAGON_BUILD)/hexagon.mk")
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
   # An unbundled app build needs only the core product makefiles.
@@ -181,9 +181,9 @@ else
   # files in the tree.
   all_product_configs := $(get-all-product-makefiles)
   endif # TARGET_BUILD_APPS
-endif # LINEAGE_BUILD
+endif # HEXAGON_BUILD
 
-ifeq ($(LINEAGE_BUILD),)
+ifeq ($(HEXAGON_BUILD),)
 all_named_products :=
 
 # Find the product config makefile for the current product.
