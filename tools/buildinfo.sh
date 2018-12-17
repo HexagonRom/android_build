@@ -62,6 +62,6 @@ if [ -n "$BUILD_THUMBPRINT" ] ; then
 fi
 echo "ro.build.characteristics=$TARGET_AAPT_CHARACTERISTICS"
 
-echo "org.pixelexperience.device=$CUSTOM_DEVICE"
+echo "org.hex.device=$CUSTOM_DEVICE"
 
 echo "# end build properties"
